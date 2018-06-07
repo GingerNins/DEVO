@@ -8,25 +8,34 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' ************************************************************************
-' Class Module: RawData IO
-'   Reads raw data from specified worksheet and creates one or more
-'   SimoaRuns
+' Class Module: RawDataIO
+'   Reads raw data from specified worksheet and creates a SimoaRun
 ' ************************************************************************
 
 
 ' ************************************************************************
 ' Properties
 ' ************************************************************************
+' Sheet that contains the raw data from the Simoa Run
 Private shtRawData As Worksheet
+' Range containing all sample barcodes
 Private rSampleBarcode As Range
+' Range containing all replicate AEB values
 Private rReplicateAeb As Range
+' Range containing all replicate concentration values (in pg/ml)
 Private rReplicateConc As Range
+' Range containing the Batch Name(s) for the run(s)
 Private rBatchName As Range
+' Range containing the plate name for the run(s)
 Private rCarrierBarcode As Range
+' Range containing the plate locations for each replicate
 Private rLocation As Range
+' Range containing the errors (if any) for the replicate
 Private rErrors As Range
-
-Private vSimoaRun As New SimoaRun
+' Stores all ranges as an array
+Private rawDataRanges As Range
+' Collection batches found in the raw data
+Private collBatches As New Collection
 
 ' Constants for header strings found in the raw data sheet
 Private Const SAMPLE_BARCODE As String = "Sample Barcode"
@@ -40,9 +49,9 @@ Private Const ERRORS As String = "Errors"
 ' ************************************************************************
 ' Get/Set/Let Properties
 ' ************************************************************************
-Public Property Get SimoaRunData(shtName As Worksheet) As SimoaRun
+Public Property Get Batches(shtName As Worksheet) As Collection
     readRawDataSheet shtName
-    Set SimoaRunData = vSimoaRun
+    Set Batches = collBatches
 End Property
 
 
@@ -63,7 +72,10 @@ Private Sub readRawDataSheet(shtName As Worksheet)
     
     ' Store QC Information
     setQCConcentrations
-    vSimoaRun.BatchName = "Hi I'm a batch name"
+    
+    ' Create batches for each batch name found
+    'vSimoaRun.BatchName = "Hi I'm a batch name"
+    
     
 End Sub
 
@@ -78,6 +90,7 @@ Private Sub setQCConcentrations()
     
 End Sub
 
+' Stores the raw data ranges
 Private Sub setRawDataRanges()
     ' Last row in the worksheet
     Dim lRow As Long: lRow = LastRow(shtRawData)
@@ -89,6 +102,7 @@ Private Sub setRawDataRanges()
     Dim rHeaders As Range: Set rHeaders = shtRawData.Range("A1:" & lColLetter & "1")
     ' Temp range variable for looping
     Dim header As Range
+    Dim rawDataRanges(0 To 6) As Range
     
     Dim headerCol As String
     For Each header In rHeaders
@@ -96,6 +110,7 @@ Private Sub setRawDataRanges()
         Select Case header.Value
             Case SAMPLE_BARCODE
                 Set rSampleBarcode = shtRawData.Range(headerCol & "2:" & headerCol & lRow)
+                Set rawDataRanges(0) = rSampleBarcode
             Case REPLICATE_AEB
                 Set rReplicateAeb = shtRawData.Range(headerCol & "2:" & headerCol & lRow)
             Case REPLICATE_CONC
@@ -112,6 +127,13 @@ Private Sub setRawDataRanges()
                 ' There are columns that will not be used
         End Select
     Next header
+    
+    ' Error if any of the ranges are empty
+    
+    For i = LBound(rawDataRanges) To UBound(rawDataRanges)
+        Debug.Print "stuff"
+    Next i
+    
 End Sub
 
 ' Converts the column number to a letter

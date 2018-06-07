@@ -9,10 +9,10 @@ Sub testing()
     
     ' Process raw data
     Dim readRawData As New RawDataIO
-    Dim s As New SimoaRun
+    Dim runBatches As New Collection
     
-    Set s = readRawData.SimoaRunData(ws)
-    MsgBox s.BatchName
+    Set runBatches = readRawData.Batches(ws)
+    MsgBox "I'm at the end of the testing sub"
     
     
     ' Delete the copied master worksheet and activate the actual master sheet
