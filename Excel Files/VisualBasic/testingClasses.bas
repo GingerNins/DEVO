@@ -24,8 +24,8 @@ Sub testing()
     ' ********************************************************************
     ' Current unused/testing code
     ' ********************************************************************
-    Dim a As New DevoAssay
-    Dim frm As New frmDevoAssayGUI
+    'Dim a As New DevoAssay
+    'Dim frm As New frmDevoAssayGUI
     'frm.Show
     'If frm.Cancelled = True Then
     '    MsgBox "Cancelled"

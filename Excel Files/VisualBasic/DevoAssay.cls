@@ -15,16 +15,27 @@ Attribute VB_Exposed = False
 
 ' Pheresis or Blood Draw
 Private sPheresis As String
-' Overall MAD for all data in assay
-Private dAssayMAD As Double
+' Patient ID
+Private sPID As String
+' Date of assay setup
+Private sDate As String
 ' All LRAs/conditions in assay
 Private cConditions As New Collection
-' All Runs in assay
-Private cAssayRuns As Collection
-' Culture volume in microliters (optional)
-Private dCultureVolume As Double
-' All feeders used in the assay
-Private dFeeders As Collection
+' All targets used in the assay
+Private dTargets As Collection
+' All dilutions/condition used
+Private cDilutions As Collection
+' Number of replicates per dilution
+Private iReplicates As Integer
+' All harvest days in assay
+Private cHarvestDays As Collection
+' Other factors (such as culture vol) that will affect # of conditions
+Private dOtherFactors As Collection
+' All Simoa batch runs in assay
+Private cBatches As Collection
+' Overall MAD for all data in assay
+Private dAssayMAD As Double
+
 
 ' Get/Set Properties
 ' ************************************************************************
