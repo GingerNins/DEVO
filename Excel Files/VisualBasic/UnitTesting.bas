@@ -12,6 +12,16 @@ End Sub
 
 '@TestMethod
 Public Sub testPheresisName()
-    d.Pheresis = "PH321"
+    'Dim userInput As String
+    'With Fakes.InputBox
+    '    .Returns vbNullString, 1
+    '    .ReturnsWhen "Prompt", "Second", "User entry 2", 2
+    '    userInput = InputBox("First")
+    '    Assert.IsTrue userInput = vbNullString
+    '    userInput = InputBox("Second")
+    '    Assert.IsTrue userInput = "User entry 2"
+    'End With
+    
+    d.Pheresis = "PH32"
     Assert.AreEqual "PH321", d.Pheresis
 End Sub

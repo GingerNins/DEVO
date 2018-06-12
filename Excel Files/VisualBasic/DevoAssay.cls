@@ -7,9 +7,11 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+' ************************************************************************
 ' Class Module: DevoAssay
 ' ************************************************************************
 
+' ************************************************************************
 ' Properties
 ' ************************************************************************
 
@@ -36,7 +38,10 @@ Private cBatches As Collection
 ' Overall MAD for all data in assay
 Private dAssayMAD As Double
 
+' Error constant for any invalid data
+Private Const ERROR_INVALID_DATA As Long = vbObjectError + 514
 
+' ************************************************************************
 ' Get/Set Properties
 ' ************************************************************************
 
@@ -46,23 +51,14 @@ Property Get Pheresis() As String
 End Property
 
 ' Sets the name of the pheresis or blood draw
-' Must be in the format BD### or PH###
+' @param strName Name of the Pheresis or Blood Draw
+' @Throws error if not in the format BD### or PH###
 Property Let Pheresis(strName As String)
     If strName Like "BD###" Or strName Like "PH###" Then
         sPheresis = strName
     Else
-        Pheresis = InputBox(strName & " should be in the format BD### or PH###")
+        Err.Raise ERROR_INVALID_DATA, "Let Pheresis", "Pheresis/Blood Draw should be in the format BD### or PH###"
     End If
-End Property
-
-' Get the culture volume in microliters
-Property Get CultureVolume() As Double
-    CultureVolume = dCultureVolume
-End Property
-
-' Sets the culture volume in microliters (optional)
-Property Let CultureVolume(dblCultureVolume As Double)
-    dCultureVolume = dblCultureVolume
 End Property
 
 ' Gets the list of conditions in the assay
@@ -75,9 +71,10 @@ Property Set Conditions(collConditions As Collection)
 
 End Property
 
-
+' ************************************************************************
 ' Methods
 ' ************************************************************************
+
 ' Initializes the assay with the name and the conditions
 Public Sub Init(strName As String, arrConditions As Variant, arrFeeders As Variant)
     Pheresis = strName
